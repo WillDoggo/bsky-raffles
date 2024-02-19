@@ -12,6 +12,8 @@
 	<link href="style.css" rel="stylesheet">
 </head>
 <body>
+	<div class="mb-4"></div>
+
 	<div class="loading hidden"></div>
 
 	<div class="container error hidden mb-3">
@@ -23,7 +25,7 @@
 	</div>
 
 	<div class="container form-page hidden mb-3">
-		<form>
+		<form id="post-uri-form">
 			<div class="row">
 				<div class="col-md-9">
 					<input type="text" class="form-control form-control-lg" id="post-uri" placeholder="Raffle post URL...">
@@ -31,6 +33,83 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-2">
 					<button class="btn btn-primary btn-lg" id="post-uri-submit" disabled>Go</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="container options-page hidden mb-3">
+		<div id="original-post" class="box-outline mb-4">
+
+			<!-- Profile info -->
+			<div class="row mb-3">
+				<div class="col-md-12">
+					<div  class="profile-info">
+						<img class="profile-icon float-start" src=""/>
+						<div class="profile-name-handle float-start">
+							<div class="profile-name"></div>
+							<div class="profile-handle"></div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Post text -->
+			<div class="row">
+				<div class="col-md-12 post-body"></div>
+			</div>
+
+		</div>
+
+		<!-- Options -->
+		<form>
+			<div class="row mb-3">
+				<div class="col-md-5 mb-4">
+					<h2>Drawing options</h2>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="1" id="require-following" checked>
+						<label class="form-check-label" for="require-following">Require following</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="1" id="require-reposted" checked>
+						<label class="form-check-label" for="require-reposted">Require reposted</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="1" id="require-liked">
+						<label class="form-check-label" for="require-liked">Require liked</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="1" id="require-replies">
+						<label class="form-check-label" for="require-replies">Require reply</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="1" id="require-image-replies" disabled>
+						<label class="form-check-label" for="require-image-replies">Require reply with image</label>
+					</div>
+
+					<label for="num-winners" class="form-label mt-3">Number of winners:</label>
+					<input type="number" min="1" max="20" step="1" class="form-control" id="num-winners" value="1">
+				</div>
+
+				<div class="col-md-1"></div>
+
+				<div class="col-md-6 mb-4">
+					<h2>Optional password verification</h2>
+					<div class="verification-info">
+						<p>If you want to verify this raffle drawing as official, you can provide an app password here associated with your BlueSky account.</p>
+						<p>This is not required, but can be used as an additional step to show raffle entrants that this drawing was done by the actual post author.</p>
+						<p><a target="_blank" href="https://bsky.app/settings/app-passwords">You can create an app password here.</a></p>
+						<p>This tool does not store this password, and only uses it for verifying the post author. The app password can be deleted on BlueSky after the drawing is made.</p>
+					</div>
+					<input type="password" class="form-control mt-2" id="app-password" placeholder="xxxx-xxxx-xxxx-xxxx">
+				</div>
+			</div>
+
+			<!-- Options -->
+			<div class="row mb-4">
+				<div class="col-md-12">
+					<button id="draw-btn" class="btn btn-lg btn-primary fullwidth">Draw Winner 🎉</button>
 				</div>
 			</div>
 		</form>

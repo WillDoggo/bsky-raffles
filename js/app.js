@@ -11,23 +11,56 @@ const App = class {
 
 	initializeMainPage() {
 		this.toggleHidden(this.$formPage, false);
+		this.toggleHidden(this.$optionsPage, true);
 		this.toggleHidden(this.$resultsPage, true);
 	}
 
-	initializeDrawingResultsPage(results) {
+	initializeOptionsPage() {
 		this.toggleHidden(this.$formPage, true);
+		this.toggleHidden(this.$optionsPage, false);
+		this.toggleHidden(this.$resultsPage, true);
+
+		this.$originalPost.find(`.profile-icon`).attr(`src`, this.parsedPost.post.author.avatar);
+		this.$originalPost.find(`.profile-name`).text(this.parsedPost.post.author.displayName);
+		this.$originalPost.find(`.profile-handle`).text(`@${this.parsedPost.post.author.handle}`);
+		this.$originalPost.find(`.post-body`).html(this.encodeHtml(this.parsedPost.post.record.text).replaceAll(`\n`, `<br>`));
+	}
+
+	initializeDrawingResultsPage() {
+		this.toggleHidden(this.$formPage, true);
+		this.toggleHidden(this.$optionsPage, true);
 		this.toggleHidden(this.$resultsPage, false);
+	}
+
+	encodeHtml(rawStr) {
+		return rawStr.replace(/[\u00A0-\u9999<>\&]/g, (i) => `&#${i.charCodeAt(0)};`);
 	}
 
 	async fetchDrawingResult(drawingId) {
 		this.showLoading(true);
 		try {
 			this.drawingResults = await this.api.getDrawing(drawingId);
-			this.initializeDrawingResultsPage(drawingResults);
+			this.initializeDrawingResultsPage();
 		} catch (err) {
 			this.drawingResults = null;
 			this.showError(err);
 			this.initializeMainPage();
+		} finally {
+			this.showLoading(false);
+		}
+	}
+
+	async postUriFormSubmitted(e) {
+		e.preventDefault();
+		this.showLoading(true);
+		const postUri = this.$postUriInput.val().trim();
+
+		try {
+			this.parsedPost = await this.api.parsePost(postUri);
+			this.initializeOptionsPage();
+		} catch (err) {
+			this.parsedPost = null;
+			this.showError(err);
 		} finally {
 			this.showLoading(false);
 		}
@@ -47,12 +80,36 @@ const App = class {
 		this.$loading = jQuery(`.loading`);
 		this.$error = jQuery(`.error`);
 		this.$formPage = jQuery(`.form-page`);
+		this.$optionsPage = jQuery(`.options-page`);
 		this.$resultsPage = jQuery(`.results-page`);
 		this.$postUriInput = jQuery(`#post-uri`);
 		this.$postUriSubmit = jQuery(`#post-uri-submit`);
+		this.$postUriForm = jQuery(`#post-uri-form`);
+
+		this.$originalPost = jQuery(`#original-post`);
+		this.$optionRequireFollowing = jQuery(`#require-following`);
+		this.$optionRequireReposted = jQuery(`#require-reposted`);
+		this.$optionRequireLiked = jQuery(`#require-liked`);
+		this.$optionRequireReplies = jQuery(`#require-replies`);
+		this.$optionRequireImageReplies = jQuery(`#require-image-replies`);
+		this.$optionNumWinners = jQuery(`#num-winners`);
+		this.$optionAppPassword = jQuery(`#app-password`);
+		this.$drawButton = jQuery(`#draw-btn`);
 
 		// Setting up event handlers
 		this.$postUriInput.keyup(() => this.validatePostUri());
+		this.$postUriForm.submit(e => this.postUriFormSubmitted(e).catch(err => this.showError(err)));
+		this.$optionRequireReplies.on(`change`, undefined, e => {
+			if (e.target.checked) {
+				this.$optionRequireImageReplies.removeAttr(`disabled`);
+			} else {
+				this.$optionRequireImageReplies.attr(`disabled`, `disabled`);
+				this.$optionRequireImageReplies.removeAttr(`checked`);
+			}
+		});
+		this.$optionNumWinners.keyup(() => this.validateOptionsForm());
+		this.$optionNumWinners.on(`input`, () => this.validateOptionsForm());
+		this.$optionAppPassword.keyup(() => this.validateOptionsForm());
 
 		// Parsing URL query and loading app
 		const query = window.location.search.replace(/^\?/, ``).trim();
@@ -62,6 +119,7 @@ const App = class {
 		}
 
 		this.initializeMainPage();
+		this.$postUriInput.focus();
 	}
 
 	toggleHidden($el, hidden) {
@@ -70,6 +128,28 @@ const App = class {
 		} else {
 			$el.removeClass(`hidden`);
 		}
+	}
+
+	validateOptionsForm() {
+		let valid = true;
+		const numWinnersText = this.$optionNumWinners.val();
+		const numWinners = parseInt(this.$optionNumWinners.val());
+		if (!/^[0-9]+$/g.exec(numWinnersText) || isNaN(numWinners) || numWinners < 1) {
+			valid = false;
+		}
+		const appPassword = this.$optionAppPassword.val();
+		if (appPassword.length > 0 && !/^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$/g.exec(appPassword)) {
+			valid = false;
+		}
+
+		if (valid) {
+			this.$drawButton.removeAttr(`disabled`);
+		} else {
+			this.$drawButton.attr(`disabled`, `disabled`);
+			return;
+		}
+
+		this.$drawButton.text(`Draw Winner${(numWinners == 1 ? `` : `s`)} 🎉`);
 	}
 
 	validatePostUri() {
