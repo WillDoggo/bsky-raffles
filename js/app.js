@@ -50,6 +50,32 @@ const App = class {
 		}
 	}
 
+	async optionsFormSubmitted(e) {
+		e.preventDefault();
+		this.showLoading(true);
+
+		const options = {
+			winnerCount: parseInt(this.$optionNumWinners.val()),
+		};
+		if (this.$optionRequireFollowing[0].checked) options[`requireFollow`] = true;
+		if (this.$optionRequireReposted[0].checked) options[`requireRepost`] = true;
+		if (this.$optionRequireLiked[0].checked) options[`requireLike`] = true;
+		if (this.$optionRequireReplies[0].checked) options[`requireReply`] = true;
+		if (this.$optionRequireImageReplies[0].checked) options[`requireReplyImage`] = true;
+		if (this.$optionAppPassword.val().length > 0) options[`password`] = this.$optionAppPassword.val();
+
+		try {
+			const drawingResult = await this.api.drawWinners(this.postUri, options);
+			if (!drawingResult || !drawingResult.drawingId) {
+				throw new Error(`Failed to make raffle drawing due to an unknown error`);
+			}
+			window.location.href = `${window.location.origin}${window.location.pathname}?${drawingResult.drawingId}`;
+		} catch (err) {
+			this.showError(err);
+			this.showLoading(false);
+		}
+	}
+
 	async postUriFormSubmitted(e) {
 		e.preventDefault();
 		this.showLoading(true);
@@ -57,6 +83,7 @@ const App = class {
 
 		try {
 			this.parsedPost = await this.api.parsePost(postUri);
+			this.postUri = postUri;
 			this.initializeOptionsPage();
 		} catch (err) {
 			this.parsedPost = null;
@@ -86,6 +113,7 @@ const App = class {
 		this.$postUriSubmit = jQuery(`#post-uri-submit`);
 		this.$postUriForm = jQuery(`#post-uri-form`);
 
+		this.$optionsForm = jQuery(`#options-form`);
 		this.$originalPost = jQuery(`#original-post`);
 		this.$optionRequireFollowing = jQuery(`#require-following`);
 		this.$optionRequireReposted = jQuery(`#require-reposted`);
@@ -110,6 +138,7 @@ const App = class {
 		this.$optionNumWinners.keyup(() => this.validateOptionsForm());
 		this.$optionNumWinners.on(`input`, () => this.validateOptionsForm());
 		this.$optionAppPassword.keyup(() => this.validateOptionsForm());
+		this.$optionsForm.submit(e => this.optionsFormSubmitted(e).catch(err => this.showError(err)));
 
 		// Parsing URL query and loading app
 		const query = window.location.search.replace(/^\?/, ``).trim();
