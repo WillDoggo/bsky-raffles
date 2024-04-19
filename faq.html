@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="WillDoggo">
+	<meta name="generator" content="Hugo 0.84.0">
+	<title>BlueSky Raffles</title>
+	<meta name="theme-color" content="#7952b3">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<link href="style.css" rel="stylesheet">
+</head>
+<body>
+	<div class="mb-4"></div>
+
+	<div class="container error hidden mb-3">
+		<div class="row">
+			<div class="col-12">
+				<div class="error-box"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container header mb-4">
+		<div class="row">
+			<div class="col-md-12 text-center display-2 mb-2">
+				<strong>BlueSky</strong> Raffle Picker 🎉
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center mb-1">
+				Created by <a href="https://bsky.app/profile/willdoggo.bsky.social" target="_blank">@WillDoggo</a> on Bsky.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center secondary-text mb-4">
+				Fan project not affiliated with Bluesky PBLLC.
+			</div>
+		</div>
+	</div>
+
+	<div class="container form-page mb-3 faq">
+		<div class="row">
+			<div class="col-md-12 mb-3">
+				<h2 class="display-3"><strong>FAQ</strong></h2>
+			</div>
+		</div>
+
+		<!-- What is this tool? -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><strong>What is this tool?</strong></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p>This tool is made for artists on <a href="https://bsky.app/">BlueSky</a> who run raffles for their followers. It facilitates the process of selecting a winner based on a variety of critera depending on the rules of the raffle.</p>
+			</div>
+		</div>
+
+		<!-- How does it work? -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><strong>How does it work?</strong></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p>When the artist draws a winner (or winners), this tool first fetches all of the replies, reposts, and likes on the raffle post. Afterwards, it filters everything down to a set of entrants who have satisfied all the requirements. Finally, it draws a random winner from that pool (or multiple winners, depending on the artist's preference).</p>
+			</div>
+		</div>
+
+		<!-- What does the "Verified" thing mean? -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><strong>What does the "Verified" thing mean?</strong></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p>Drawings can be made by anyone, even those who did not author the original raffle post. This is because this tool does not require authorizing to any accounts, by default.</p>
+				<p>The verification indicates that the author themselves did the drawing.</p>
+			</div>
+		</div>
+
+		<!-- Why does verification require an app password? -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><strong>Why does verification require an app password?</strong></h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<p></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="mb-4"></div>
+	<div class="mb-4"></div>
+
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	<script src="js/bsky-raffles.js"></script>
+	<script src="js/app.js"></script>
+</body>
+</html>

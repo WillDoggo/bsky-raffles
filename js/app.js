@@ -2,7 +2,7 @@
 
 const App = class {
 	constructor() {
-		const urlBase = `http://localhost:3000`;
+		const urlBase = `https://bsky-raffles.dang.dog`;
 		this.api = new BskyRaffles(urlBase);
 		this.parsedPost = null;
 		this.drawingResults = null;
